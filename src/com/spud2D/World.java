@@ -13,12 +13,14 @@ import java.util.Random;
 import objects.GameObject;
 import objects.ObjectLayerComparator;
 import objects.ObjectPositioner;
+import objects.ParticleObjectBase;
 import objects.tiles.CrateObjectBase;
 import objects.tiles.TerrainObject;
 
 public class World {
 	public ArrayList<GameObject> objectsList = new ArrayList<GameObject>();
 	public ArrayList<GameObject> objectSpawnQueue = new ArrayList<GameObject>();
+	public ArrayList<ParticleObjectBase> particles = new ArrayList<ParticleObjectBase>();
 	
 	public float gravity = 1.0F;
 	public Random rand;
@@ -81,6 +83,17 @@ public class World {
 			
 		}
 		
+		//Update particles
+		for(int i = 0; i < particles.size(); i ++){
+			ParticleObjectBase p = particles.get(i);
+			p.update(delta);
+			if(p.isDead){
+				particles.remove(p);
+			}
+		}
+		
+		System.out.println("PARTOBJS:"+particles.size());
+		
 		//System.out.println("SLANTED TERRAIN #="+slanters);
 		
 	}
@@ -98,7 +111,9 @@ public class World {
 	}
 	
 	
-	
+	public void spawnParticle(ParticleObjectBase p){
+		particles.add(p);
+	}
 	
 	
 	

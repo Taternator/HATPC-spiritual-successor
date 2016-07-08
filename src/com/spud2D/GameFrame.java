@@ -5,6 +5,7 @@ import java.util.Random;
 
 import objects.ClientPlayerObject;
 import objects.GameObject;
+import objects.ParticleObjectBase;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AppGameContainer;
@@ -56,6 +57,9 @@ public class GameFrame extends BasicGame {
 		//layer. I.E entity 23 has layer 0, and entity 72 has layer 0. 23 would become first entry in list, 72 second, etc.
 		for(GameObject obj : world.objectsList){
 			obj.render(g);
+		}
+		for(ParticleObjectBase p : world.particles){
+			p.render(g);
 		}
 		GL11.glPopMatrix();
 		g.drawString("X:"+player.pos.x+" Y:"+player.pos.y, 2, 24);

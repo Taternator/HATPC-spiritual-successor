@@ -7,7 +7,7 @@ import com.spud2D.World;
 
 public class CrateObjectBase extends TerrainObject {
 	
-	private GameObject objectInside;
+	protected GameObject objectInside;
 	
 	public CrateObjectBase() {
 		//this.setTexture("TERRAIN_EMPTYCRATE");
@@ -24,6 +24,7 @@ public class CrateObjectBase extends TerrainObject {
 	
 	@Override
 	public boolean collideWith(GameObject other){
+		if(isDead)return false;
 		System.out.println("REEEEE");
 		boolean topCollision = this.hitbox.doesTopTouchBottomOf(other.getHitbox());
 		
@@ -41,7 +42,7 @@ public class CrateObjectBase extends TerrainObject {
 		
 		//Called if the object passed collided with this, and is a player
 		if(b && other instanceof ClientPlayerObject){
-			openCrate();
+			openCrate((ClientPlayerObject)other);
 			other.onGround=false;
 			isDead=true;
 		}
@@ -55,7 +56,7 @@ public class CrateObjectBase extends TerrainObject {
 	
 	
 	//Called when a player collides with this
-	protected void openCrate(){
+	protected void openCrate(ClientPlayerObject c){
 		spawnBloodSpurts();
 		if(objectInside!=null){
 			world.addObjectToSpawnQueue(objectInside);

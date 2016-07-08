@@ -24,7 +24,7 @@ public class GameObject implements Comparable<GameObject> {
 	public int direction;
 	public float overheal=0, health=0, maxHealth = 10, hitlag;
 	public float weight = 0.9F;
-	public int jumpTicks, maxJumpTicks=-25, liveTicks, deathTicks, insideTicks;
+	public int jumpTicks, maxJumpTicks=-25, liveTicks, deathTicks, maxDeathTicks, insideTicks;
 	public boolean onGround = false, isDead=false, shouldOverheal=false, canMove = false, canWallCling = false, canFly = false, isSolid = true, insideOfObject = false, isControllable = false, shouldRender = true;
 	public World world;
 	
@@ -66,7 +66,7 @@ public class GameObject implements Comparable<GameObject> {
 		}
 		if(this.isDead){
 			deathTicks ++;
-			if(deathTicks >=40){
+			if(deathTicks >=maxDeathTicks){
 				onDeath();
 				world.removeObject(this);
 			}
@@ -217,20 +217,22 @@ public class GameObject implements Comparable<GameObject> {
 	}
 	
 	public void spawnBloodSpurts(){
-		for(int i = 0; i < (world.rand.nextInt(3)*50)+80; i ++){
-			ParticleBloodDrops particle = new ParticleBloodDrops(world);
+		for(int i = 0; i < 1; i ++){
+			ParticleBloodDrops particle = new ParticleBloodDrops(10, pos.x+(width/2), pos.y+(height/2));
 			float h,k;
 			
-			h=world.rand.nextBoolean() ? ((world.rand.nextInt(3)+1)*4) : -((world.rand.nextInt(3)+1)*4);
-			k= -((world.rand.nextInt(3)+0.5F)*7);// : -((world.rand.nextInt(3)+2)*9);
-			
-			h *= world.rand.nextFloat();
-			k *= world.rand.nextFloat()+0.2F;
-			
-			particle.setPosition(pos.x+(width/2), pos.y+(height/2));
-			particle.motionX = h;particle.motionY = k;
-			particle.motionX += motionX; particle.motionY += motionY;
-			world.addObjectToSpawnQueue(particle);
+			for(int b = 0; b < particle.pos.length; b ++){
+				
+				h=world.rand.nextBoolean() ? ((world.rand.nextInt(3)+1)*4) : -((world.rand.nextInt(3)+1)*4);
+				k= -((world.rand.nextInt(3)+0.5F)*7);// : -((world.rand.nextInt(3)+2)*9);
+				
+				h *= world.rand.nextFloat();
+				k *= world.rand.nextFloat()+0.2F;
+				
+				particle.motionX[b] = h;particle.motionY[b] = k;
+				particle.motionX[b]+= motionX; particle.motionY[b] += motionY;
+			}
+			world.spawnParticle(particle);
 		}
 	}
 	

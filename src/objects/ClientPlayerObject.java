@@ -8,7 +8,8 @@ import com.spud2D.Controls;
 import com.spud2D.World;
 
 public class ClientPlayerObject extends GameObject {
-
+	public int points = 0;
+	
 	public ClientPlayerObject(World w) {
 		super(w);
 		canMove = true;
