@@ -27,7 +27,7 @@ public class World {
 		rand = new Random();
 	}
 	
-	public void update(float scrollX, float scrollY){
+	public void update(int delta){
 		if(!objectSpawnQueue.isEmpty()){
 			for(int i = 0; i < objectSpawnQueue.size(); i ++){
 				GameObject obj = objectSpawnQueue.get(i);
@@ -47,7 +47,7 @@ public class World {
 			if(obj.isControllable){
 				Controls.onBoundObjectUpdate(obj);
 			}
-			obj.update(scrollX, scrollY);
+			obj.update(delta);
 			
 			
 			

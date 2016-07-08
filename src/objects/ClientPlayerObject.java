@@ -28,7 +28,7 @@ public class ClientPlayerObject extends GameObject {
 			if(direction==DIRECTION_RIGHT){
 				img = img.getFlippedCopy(true, false);
 			}
-			img.draw(baseX, baseY);
+			img.draw(pos.x, pos.y);
 			if(Controls.DEBUG){
 				renderHitbox(g);
 			}

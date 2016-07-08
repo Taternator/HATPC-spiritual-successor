@@ -49,7 +49,7 @@ public class GameFrame extends BasicGame {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(windowWidth/2,windowHeight/2,0);
 		GL11.glScalef(camera.cameraZoom, camera.cameraZoom, 1);
-		GL11.glTranslatef(-camera.baseX, -camera.baseY, 0);
+		GL11.glTranslatef(-camera.pos.x, -camera.pos.y, 0);
 		
 		//TODO Add a "layer" variable to objects for what order they should be rendered,
 		//and then create a comparator to sort objectsList so that entity entries are organized by
@@ -58,7 +58,7 @@ public class GameFrame extends BasicGame {
 			obj.render(g);
 		}
 		GL11.glPopMatrix();
-		g.drawString("X:"+player.baseX+" Y:"+player.baseY, 2, 24);
+		g.drawString("X:"+player.pos.x+" Y:"+player.pos.y, 2, 24);
 		g.drawString("MX:"+player.motionX+" MY:"+player.motionY, 2, 36);
 		g.drawString("SCRX:"+scrollX+" SCRY:"+scrollY, 2, 48);
 	}
@@ -93,32 +93,32 @@ public class GameFrame extends BasicGame {
 	}
 
 	@Override
-	public void update(GameContainer gc, int arg1) throws SlickException {
+	public void update(GameContainer gc, int delta) throws SlickException {
 		
-		world.update(0,0);
+		world.update(delta);
 		
 		//Scrolling logic
-		if(player.baseX<SCROLL_X_MIN-scrollX){
+		if(player.pos.x<SCROLL_X_MIN-scrollX){
 			//scrollX ++;
-			//player.baseX = SCROLL_X_MIN-scrollX;
+			//player.pos.x = SCROLL_X_MIN-scrollX;
 		}
-		if(player.baseX>SCROLL_X_MAX-scrollX){
+		if(player.pos.x>SCROLL_X_MAX-scrollX){
 			//scrollX --;
-			//player.baseX = SCROLL_X_MIN-scrollX;
+			//player.pos.x = SCROLL_X_MIN-scrollX;
 		}
 		
-		if(player.baseX > 0){
-			scrollX = -(player.baseX);//+(windowWidth/2);
+		if(player.pos.x > 0){
+			scrollX = -(player.pos.x);//+(windowWidth/2);
 		}
-		if(player.baseX < 0){
-			scrollX = Math.abs((player.baseX));//+(windowWidth/2);
+		if(player.pos.x < 0){
+			scrollX = Math.abs((player.pos.x));//+(windowWidth/2);
 		}
 		
-		if(player.baseY > 0){
-			scrollY = -(player.baseY);//+(windowWidth/2);
+		if(player.pos.y > 0){
+			scrollY = -(player.pos.y);//+(windowWidth/2);
 		}
-		if(player.baseY < 0){
-			scrollY = Math.abs((player.baseY));//+(windowWidth/2);
+		if(player.pos.y < 0){
+			scrollY = Math.abs((player.pos.y));//+(windowWidth/2);
 		}
 	}
 	

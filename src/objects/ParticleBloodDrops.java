@@ -17,16 +17,16 @@ public class ParticleBloodDrops extends ParticleObjectBase {
 	
 	public Color color;
 	
-	public void update(float sx, float sy){
+	public void update(int delta){
 		motionX *= particleMotionDecayMultiplier;
 		motionY *= particleMotionDecayMultiplier;
-		super.update(sx,sy);
+		super.update(delta);
 	}
 	
 	public void render(Graphics g){
 		//super.render(g);
 		g.setColor(color);
-		g.fillRoundRect(baseX, baseY, 3, 3, 3);
+		g.fillRoundRect(pos.x, pos.y, 3, 3, 3);
 		g.setColor(Color.white);
 	}
 

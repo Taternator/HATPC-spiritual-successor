@@ -15,8 +15,8 @@ public class Camera extends GameObject{
 		this.canMove=false;
 	}
 	
-	public void update(float sx, float sy){
-		baseX = focus.baseX;
-		baseY = focus.baseY;
+	public void update(int delta){
+		pos.x = focus.pos.x;
+		pos.y = focus.pos.y;
 	}
 }

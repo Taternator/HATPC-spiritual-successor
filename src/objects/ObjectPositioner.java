@@ -19,9 +19,9 @@ public class ObjectPositioner extends GameObject {
 		System.out.println("Init!");
 	}
 	
-	public void update(float sx, float sy){
+	public void update(int delta){
 		if(liveTicks>=2){
-			toMove.setPosition(baseX, baseY);
+			toMove.setPosition(pos.x, pos.y);
 			System.out.println("Sproink!");
 			this.isDead = true;
 			world.removeObject(this);
@@ -38,7 +38,7 @@ public class ObjectPositioner extends GameObject {
 		obj.world=this.world;
 		obj.isSolid=this.isSolid;
 		obj.canMove=this.canMove;
-		obj.baseX=this.baseX;obj.baseY=this.baseY;
+		obj.pos.x=this.pos.x;obj.pos.y=this.pos.y;
 		obj.motionX=this.motionX;obj.motionY=this.motionY;
 		obj.moveSpeed=this.moveSpeed;obj.jumpHeight=this.jumpHeight;
 		obj.health=this.health;obj.maxHealth=this.maxHealth;

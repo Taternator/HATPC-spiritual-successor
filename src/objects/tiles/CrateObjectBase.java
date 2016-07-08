@@ -18,8 +18,8 @@ public class CrateObjectBase extends TerrainObject {
 		//this.setTexture("TERRAIN_EMPTYCRATE");
 	}
 	
-	public void update(float sx, float sy){
-		super.update(sx, sy);
+	public void update(int delta){
+		super.update(delta);
 	}
 	
 	@Override
@@ -34,7 +34,7 @@ public class CrateObjectBase extends TerrainObject {
 		//Apply 'bounce' effect if needed
 		if(topCollision&&health>0){
 			other.motionY = -Math.abs(my-0.1F);
-			other.baseY+=other.motionY;
+			other.pos.y+=other.motionY;
 			other.hitbox.update();
 		}
 		
@@ -69,7 +69,7 @@ public class CrateObjectBase extends TerrainObject {
 		obj.world=this.world;
 		obj.isSolid=this.isSolid;
 		obj.canMove=this.canMove;
-		obj.baseX=this.baseX;obj.baseY=this.baseY;
+		obj.pos.x=this.pos.x;obj.pos.y=this.pos.y;
 		obj.motionX=this.motionX;obj.motionY=this.motionY;
 		obj.moveSpeed=this.moveSpeed;obj.jumpHeight=this.jumpHeight;
 		obj.health=this.health;obj.maxHealth=this.maxHealth;

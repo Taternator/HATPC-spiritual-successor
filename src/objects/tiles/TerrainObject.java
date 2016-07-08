@@ -22,8 +22,8 @@ public class TerrainObject extends GameObject {
 		this.currentAnimation.setCurrentFrame(0);
 	}
 	
-	public void update(float sx, float sy){
-		super.update(sx, sy);
+	public void update(int delta){
+		super.update(delta);
 		/*
 		if(this.getHitbox().isSlantedTerrain){
 			if(this.getHitbox().isSlantedLeft){
@@ -85,7 +85,7 @@ public class TerrainObject extends GameObject {
 						
 						System.out.println("left slant:"+slant);
 						
-						other.baseY=( this.baseY )+Math.abs( Math.round(slant) ) - other.height;
+						other.pos.y=( this.pos.y )+Math.abs( Math.round(slant) ) - other.height;
 						other.getHitbox().update();
 					}
 					else{
@@ -101,7 +101,7 @@ public class TerrainObject extends GameObject {
 						
 						slant -= 6;
 						
-						other.baseY=( ( this.baseY )-Math.round(slant) ) - other.height;
+						other.pos.y=( ( this.pos.y )-Math.round(slant) ) - other.height;
 						other.getHitbox().update();
 					}
 				}
@@ -109,12 +109,12 @@ public class TerrainObject extends GameObject {
 			else if(collisionTop) {
 				other.motionY=0;
 				other.onGround=true;
-				other.baseY=this.baseY-other.height;
+				other.pos.y=this.pos.y-other.height;
 			}
 		
 		boolean collisionBottom = hitbox.doesBottomTouchTopOf(other.getHitbox());
 		if(collisionBottom) {
-				other.baseY += Math.abs(other.motionY);
+				other.pos.y += Math.abs(other.motionY);
 				other.motionY=0;
 		}
 		
@@ -130,8 +130,8 @@ public class TerrainObject extends GameObject {
 				System.out.println(slant);
 			}
 			else{
-				other.baseX -= 0.1F;
-				other.baseX -=other.motionX * 1.1F;
+				other.pos.x -= 0.1F;
+				other.pos.x -=other.motionX * 1.1F;
 				other.motionX = 0;
 				System.out.println("LEFT!");
 			}
@@ -149,8 +149,8 @@ public class TerrainObject extends GameObject {
 				System.out.println(slant);
 			}
 			else{
-				other.baseX += 0.1F;
-				other.baseX +=Math.abs(other.motionX * 1.1F);
+				other.pos.x += 0.1F;
+				other.pos.x +=Math.abs(other.motionX * 1.1F);
 				other.motionX = 0;
 			}
 		}
@@ -179,7 +179,7 @@ public class TerrainObject extends GameObject {
 		obj.world=this.world;
 		obj.isSolid=this.isSolid;
 		obj.canMove=this.canMove;
-		obj.baseX=this.baseX;obj.baseY=this.baseY;
+		obj.pos.x=this.pos.x;obj.pos.y=this.pos.y;
 		obj.motionX=this.motionX;obj.motionY=this.motionY;
 		obj.moveSpeed=this.moveSpeed;obj.jumpHeight=this.jumpHeight;
 		obj.health=this.health;obj.maxHealth=this.maxHealth;

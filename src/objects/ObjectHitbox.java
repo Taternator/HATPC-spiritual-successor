@@ -31,24 +31,24 @@ public class ObjectHitbox {
 	}
 	
 	public void update(){
-		hitbox.setLocation(owner.baseX, owner.baseY);
+		hitbox.setLocation(owner.pos.x, owner.pos.y);
 		
-		footHitbox.setLocation(owner.baseX+4,owner.baseY+owner.height-8);
-		headHitbox.setLocation(owner.baseX+4,owner.baseY);
+		footHitbox.setLocation(owner.pos.x+4,owner.pos.y+owner.height-8);
+		headHitbox.setLocation(owner.pos.x+4,owner.pos.y);
 		
-		rightHitbox.setLocation(owner.baseX+owner.width-4,owner.baseY+8);
-		leftHitbox.setLocation(owner.baseX,owner.baseY+8);
+		rightHitbox.setLocation(owner.pos.x+owner.width-4,owner.pos.y+8);
+		leftHitbox.setLocation(owner.pos.x,owner.pos.y+8);
 		
 		
 		if(!isSlantedLeft){
-			pathHitbox = new Path(owner.baseX+owner.width,owner.baseY+owner.height);
-			pathHitbox.lineTo(owner.baseX, owner.baseY);
-			pathHitbox.lineTo(owner.baseX, owner.baseY+owner.height);
+			pathHitbox = new Path(owner.pos.x+owner.width,owner.pos.y+owner.height);
+			pathHitbox.lineTo(owner.pos.x, owner.pos.y);
+			pathHitbox.lineTo(owner.pos.x, owner.pos.y+owner.height);
 		}
 		else{
-			pathHitbox = new Path(owner.baseX,owner.baseY+owner.height);
-			pathHitbox.lineTo(owner.baseX+owner.width, owner.baseY);
-			pathHitbox.lineTo(owner.baseX+owner.width, owner.baseY+owner.height);
+			pathHitbox = new Path(owner.pos.x,owner.pos.y+owner.height);
+			pathHitbox.lineTo(owner.pos.x+owner.width, owner.pos.y);
+			pathHitbox.lineTo(owner.pos.x+owner.width, owner.pos.y+owner.height);
 		}
 		
 		

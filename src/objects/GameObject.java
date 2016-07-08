@@ -2,16 +2,12 @@ package objects;
 
 import objects.tiles.TerrainObject;
 
-import org.newdawn.slick.Color;
-
-import java.io.File;
-
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 
 import com.spud2D.AnimationLibrary;
 import com.spud2D.Controls;
@@ -19,8 +15,7 @@ import com.spud2D.LevelObject;
 import com.spud2D.World;
 
 public class GameObject implements Comparable<GameObject> {
-	public float baseX, baseY;
-	//public float disX, disY;
+	public Vector2f pos;
 	public int layer=0;
 	public float width, height;
 	public float motionX, motionY;
@@ -40,6 +35,7 @@ public class GameObject implements Comparable<GameObject> {
 	public String defaultImgPath = "res/textures/terrain/rock";
 	
 	public GameObject(){
+		pos = new Vector2f();
 		hitbox = new ObjectHitbox(this);
 	}
 	
@@ -60,10 +56,11 @@ public class GameObject implements Comparable<GameObject> {
 		this.idleAnimation=AnimationLibrary.DEBUG_TEST;
 		
 		this.setSize(1, 1);
+		pos = new Vector2f();
 	}
 	
 	
-	public void update(float sx, float sy){
+	public void update(int delta){
 		if(health<= 0&&!isDead){
 			this.isDead = true;
 		}
@@ -105,8 +102,8 @@ public class GameObject implements Comparable<GameObject> {
 			}
 			
 			
-			baseX += motionX;
-			baseY += motionY;
+			pos.x += motionX;
+			pos.y += motionY;
 			
 			motionX *= 0.9F;
 			motionY *= 0.95F;
@@ -129,8 +126,8 @@ public class GameObject implements Comparable<GameObject> {
 		
 		
 		
-		//disX = baseX+sx;
-		//disY = baseY+sy;
+		//disX = pos.x+sx;
+		//disY = pos.y+sy;
 		
 		setSize(getCurrentFrame().getWidth(),getCurrentFrame().getHeight());
 		
@@ -144,8 +141,8 @@ public class GameObject implements Comparable<GameObject> {
 	}
 	
 	public boolean insideOfObject(GameObject other){
-		Rectangle r1 = new Rectangle(baseX,baseY,width,height);
-		Rectangle r2 = new Rectangle(other.baseX,other.baseY,other.width,other.height);
+		Rectangle r1 = new Rectangle(pos.x,pos.y,width,height);
+		Rectangle r2 = new Rectangle(other.pos.x,other.pos.y,other.width,other.height);
 		r1.grow(canWallCling ? -1 : 0, -1);
 		r2.grow(canWallCling ? -1 : 0, -1);
 		return r1.intersects(r2);
@@ -164,50 +161,50 @@ public class GameObject implements Comparable<GameObject> {
 		/*
 		if(other.headHitbox.getMinY()>=hitbox.getMinY()){
 			System.out.println("yea");
-			baseY--;
+			pos.y--;
 		}
 		
 		if(other.hitbox.intersects(leftHitbox)){
-			baseX+=3;
+			pos.x+=3;
 		}
 		if(other.hitbox.intersects(rightHitbox)){
-			baseX-=3;
+			pos.x-=3;
 		}
 		
 		if(other.headHitbox.intersects(footHitbox)){
-			baseY-=3;
+			pos.y-=3;
 		}
 		*/
 		if(1==1){
 			return;
 		}
 		
-		Rectangle r1 = new Rectangle(baseX,baseY,width,height);
-		Rectangle r2 = new Rectangle(other.baseX,other.baseY,other.width,other.height);
+		Rectangle r1 = new Rectangle(pos.x,pos.y,width,height);
+		Rectangle r2 = new Rectangle(other.pos.x,other.pos.y,other.width,other.height);
 		//r1.grow(-2, 2);
 		//r2.grow(-2, 2);
 		if(r1.getMaxY()>r2.getMaxY()){
 			//System.out.println("y--~");
-			baseY -=2;
+			pos.y -=2;
 			if(other instanceof TerrainObject){
 				//motionY = 0;
 			}
 		}
 		if(r1.getMinY()<r2.getMinY()){
 			//System.out.println("y++~");
-			baseY -=2;
+			pos.y -=2;
 			if(other instanceof TerrainObject){
 				//motionY = 0;
 			}
 		}
 		if(r1.getMaxX()>r2.getMinX()){
-			baseX -=2;
+			pos.x -=2;
 			if(other instanceof TerrainObject){
 				//motionX = 0;
 			}
 		}
 		if(r1.getMinX()<r2.getMaxX()){
-			//baseX +=2;
+			//pos.x +=2;
 			if(other instanceof TerrainObject){
 				//motionX = 0;
 			}
@@ -230,7 +227,7 @@ public class GameObject implements Comparable<GameObject> {
 			h *= world.rand.nextFloat();
 			k *= world.rand.nextFloat()+0.2F;
 			
-			particle.setPosition(baseX+(width/2), baseY+(height/2));
+			particle.setPosition(pos.x+(width/2), pos.y+(height/2));
 			particle.motionX = h;particle.motionY = k;
 			particle.motionX += motionX; particle.motionY += motionY;
 			world.addObjectToSpawnQueue(particle);
@@ -257,14 +254,14 @@ public class GameObject implements Comparable<GameObject> {
 	}
 	
 	public void setPosition(float x, float y){
-		baseX=x;baseY=y;
+		pos.x=x;pos.y=y;
 	}
 	
 	public float getDistanceTo(GameObject other){
 		float res = 0;
 		
-		res+=(baseX-other.baseX);
-		res+=(baseY-other.baseY);
+		res+=(pos.x-other.pos.x);
+		res+=(pos.y-other.pos.y);
 		//if(res < 48)
 		//System.out.println("DIST:"+res);
 		return Math.abs(res);
@@ -287,7 +284,7 @@ public class GameObject implements Comparable<GameObject> {
 	public void render(Graphics g){
 		if(shouldRender&&currentAnimation!=null){
 			Image img = getCurrentFrame();
-			g.drawImage(img,baseX,baseY);
+			g.drawImage(img,pos.x,pos.y);
 			if(Controls.DEBUG){
 				renderHitbox(g);
 			}
@@ -333,7 +330,7 @@ public class GameObject implements Comparable<GameObject> {
 		obj.world=this.world;
 		obj.isSolid=this.isSolid;
 		obj.canMove=this.canMove;
-		obj.baseX=this.baseX;obj.baseY=this.baseY;
+		obj.pos.x=this.pos.x;obj.pos.y=this.pos.y;
 		obj.motionX=this.motionX;obj.motionY=this.motionY;
 		obj.moveSpeed=this.moveSpeed;obj.jumpHeight=this.jumpHeight;
 		obj.health=this.health;obj.maxHealth=this.maxHealth;

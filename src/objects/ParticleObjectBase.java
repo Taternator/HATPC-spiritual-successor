@@ -13,8 +13,8 @@ public class ParticleObjectBase extends GameObject {
 		
 	}
 	
-	public void update(float sx, float sy){
-		super.update(sx, sy);
+	public void update(int delta){
+		super.update(delta);
 		if(liveTicks>=particleLifespan){
 			isDead=true;
 		}
