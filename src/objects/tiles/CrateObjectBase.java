@@ -2,6 +2,9 @@ package objects.tiles;
 
 import objects.ClientPlayerObject;
 import objects.GameObject;
+import objects.particles.ParticleColored;
+
+import org.newdawn.slick.Color;
 
 import com.spud2D.World;
 
@@ -63,6 +66,29 @@ public class CrateObjectBase extends TerrainObject {
 		}
 	}
 	
+	
+	public void spawnBloodSpurts(){
+		Color c = new Color(1.7F,0.5F,0.2F,1);
+		for(int i = 0; i < 1; i ++){
+			ParticleColored particle = new ParticleColored(10, pos.x+(width/2), pos.y+(height/2));
+			particle.color=c;
+			
+			float h,k;
+			
+			for(int b = 0; b < particle.pos.length; b ++){
+				
+				h=world.rand.nextBoolean() ? ((world.rand.nextInt(3)+1)*4) : -((world.rand.nextInt(3)+1)*4);
+				k= -((world.rand.nextInt(3)+0.5F)*7);// : -((world.rand.nextInt(3)+2)*9);
+				
+				h *= world.rand.nextFloat();
+				k *= world.rand.nextFloat()+0.2F;
+				
+				particle.motionX[b] = h;particle.motionY[b] = k;
+				particle.motionX[b]+= motionX; particle.motionY[b] += motionY;
+			}
+			world.spawnParticle(particle);
+		}
+	}
 	
 	public GameObject copy(){
 		CrateObjectBase obj=null;

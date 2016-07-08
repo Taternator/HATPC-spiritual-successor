@@ -1,37 +1,34 @@
 package objects.tiles;
 
-import objects.ClientPlayerObject;
 import objects.GameObject;
 
-import com.spud2D.AnimationLibrary;
 import com.spud2D.World;
 
-public class TreasureCrate extends CrateObjectBase {
-
-	public TreasureCrate() {
-		this.setTexture("TERRAIN_TREASURECHEST");
-		this.doesStopOnCollision=false;
+public class TerrainSpike extends TerrainObject {
+	
+	float spikeDamage=1;
+	
+	public TerrainSpike() {
+		
 	}
 
-	public TreasureCrate(World w) {
+	public TerrainSpike(World w) {
 		super(w);
-		this.setTexture("TERRAIN_TREASURECHEST");
-		this.doesStopOnCollision=false;
 	}
 	
-	
-	protected void openCrate(ClientPlayerObject obj){
-		spawnBloodSpurts();
-		if(objectInside!=null){
-			world.addObjectToSpawnQueue(objectInside);
+	public boolean collideWith(GameObject other){
+		boolean b = super.collideWith(other);
+		
+		if(b){
+			other.takeDamage(spikeDamage);
 		}
 		
-		obj.gainPoints(1);
+		return b;
 	}
 	
 	public GameObject copy(){
-		TreasureCrate obj=null;
-		obj = new TreasureCrate(this.world);
+		TerrainSpike obj=null;
+		obj = new TerrainSpike(this.world);
 		obj.world=this.world;
 		obj.isSolid=this.isSolid;
 		obj.canMove=this.canMove;
@@ -43,9 +40,8 @@ public class TreasureCrate extends CrateObjectBase {
 		obj.currentAnimation=this.idleAnimation;
 		obj.hitbox.isSlantedTerrain=hitbox.isSlantedTerrain;
 		obj.hitbox.isSlantedLeft=hitbox.isSlantedLeft;
-		if(objectInside!=null)
-		obj.setObjectInside(objectInside.copy());
 		
 		return obj;
 	}
+
 }

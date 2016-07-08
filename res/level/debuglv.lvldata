@@ -2,4 +2,6 @@ x=terr.TERRAIN_ROCK
 r=terr.TERRAIN_ROCK slant_right
 l=terr.TERRAIN_ROCK slant_left
 e=obs.CRATE arrow_down
+t=obs.CRATE treasure
 p=PPOS
+TREASURE_REQ=5

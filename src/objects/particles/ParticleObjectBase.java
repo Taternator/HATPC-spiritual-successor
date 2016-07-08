@@ -1,4 +1,4 @@
-package objects;
+package objects.particles;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
@@ -7,10 +7,10 @@ public class ParticleObjectBase{
 	public float particleLifespan, particleMotionDecayMultiplier=1;
 	
 	int liveTicks;
-	float[] motionX,motionY;
+	public float[] motionX,motionY;
 	float fallSpeed;
 	public boolean isDead;
-	Vector2f[] pos;
+	public Vector2f[] pos;
 	int particleClusterSize;
 	
 	public ParticleObjectBase(int p, float x, float y) {

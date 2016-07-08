@@ -13,9 +13,10 @@ import java.util.Random;
 import objects.GameObject;
 import objects.ObjectLayerComparator;
 import objects.ObjectPositioner;
-import objects.ParticleObjectBase;
+import objects.particles.ParticleObjectBase;
 import objects.tiles.CrateObjectBase;
 import objects.tiles.TerrainObject;
+import objects.tiles.TreasureCrate;
 
 public class World {
 	public ArrayList<GameObject> objectsList = new ArrayList<GameObject>();
@@ -24,6 +25,8 @@ public class World {
 	
 	public float gravity = 1.0F;
 	public Random rand;
+	
+	public int chestsInWorld,chestsRequired;
 	
 	public World(){
 		rand = new Random();
@@ -92,7 +95,7 @@ public class World {
 			}
 		}
 		
-		System.out.println("PARTOBJS:"+particles.size());
+		//System.out.println("PARTOBJS:"+particles.size());
 		
 		//System.out.println("SLANTED TERRAIN #="+slanters);
 		
@@ -133,6 +136,10 @@ public class World {
 	
 	
 	public void createWorldLevel(String fileLoc, GameObject player){
+		objectsList.clear();
+		objectsList.add(GameFrame.camera);
+		objectsList.add(GameFrame.player);
+		GameFrame.player.points=0;
 		try {
 			FileReader levelStream = new FileReader(new File(fileLoc+".lvl"));
 			FileReader dataStream = new FileReader(new File(fileLoc+".lvldata"));
@@ -145,106 +152,122 @@ public class World {
 			HashMap<Character, GameObject> levelDefinitions = new HashMap<Character, GameObject>();
 			
 			float spawnX,spawnY;
-			
+
 			while((line = dataBuffer.readLine()) != null){
 				//x=terr.ROCK;
 				
 				GameObject object = null;
-				
 				String[] split = line.split("=");
-				
-				if(split[1].startsWith("terr.")){
-					
-					object = new TerrainObject(this);
-					System.out.println("Slant!");
-					boolean isSlanted = false;
-					boolean slantLeft = false;
-					if(split[1].contains(" ")){
+			
+					if(split[1].startsWith("terr.")){
 						
-						String[] argSplit = split[1].split(" ");
-						System.out.println("argsplit[1]:"+argSplit[1]);
-						for(String arg : argSplit){
-							if(arg.toLowerCase().startsWith("slant_")){
-								String slantdir="";
-								isSlanted=true;
-								((TerrainObject)object).getHitbox().isSlantedTerrain=true;
-								slantdir = arg.toLowerCase().split("slant_")[1];
-								System.out.println("slantdir:"+slantdir);
-								if(slantdir.equalsIgnoreCase("right")){
-									((TerrainObject)object).getHitbox().isSlantedLeft=false;
-									slantLeft=false;
-								}
-								else{
-									((TerrainObject)object).getHitbox().isSlantedLeft=true;
-									slantLeft=true;
+						object = new TerrainObject(this);
+						System.out.println("Slant!");
+						boolean isSlanted = false;
+						boolean slantLeft = false;
+						if(split[1].contains(" ")){
+							
+							String[] argSplit = split[1].split(" ");
+							System.out.println("argsplit[1]:"+argSplit[1]);
+							for(String arg : argSplit){
+								if(arg.toLowerCase().startsWith("slant_")){
+									String slantdir="";
+									isSlanted=true;
+									((TerrainObject)object).getHitbox().isSlantedTerrain=true;
+									slantdir = arg.toLowerCase().split("slant_")[1];
+									System.out.println("slantdir:"+slantdir);
+									if(slantdir.equalsIgnoreCase("right")){
+										((TerrainObject)object).getHitbox().isSlantedLeft=false;
+										slantLeft=false;
+									}
+									else{
+										((TerrainObject)object).getHitbox().isSlantedLeft=true;
+										slantLeft=true;
+									}
 								}
 							}
+							
+							//split = argSplit;
+							
 						}
 						
-						//split = argSplit;
+						System.out.println(split[1].split("terr.")[0]);
+						
+						String[] objdef = split[1].split("terr.");
+						
+						System.out.println(objdef[1].split(" ")[0]);
+						
+							((TerrainObject)object).setTexture(objdef[1].split(" ")[0]);
+	
+						
+						System.out.println(objdef[1]+" "+line.charAt(0));
+					}
+		
+		if(split[1].startsWith("obs.")){
+			
+			object = new CrateObjectBase(this);
+			boolean isSlanted = false;
+			boolean slantLeft = false;
+			((TerrainObject)object).setTexture("TERRAIN_EMPTYCRATE");
+			if(split[1].contains(" ")){//This all handles metadata... Shouldn't need it
+				
+				String[] argSplit = split[1].split(" ");
+				System.out.println("argsplit[1]:"+argSplit[1]);
+				for(String arg : argSplit){
+					if(arg.toLowerCase().startsWith("arrow")){//Populate the crate with an arrow
+						CrateObjectBase cr = new CrateObjectBase(this);
+						cr.setPosition(200, 200);
+						( (CrateObjectBase)object ).setObjectInside(cr);
+						
+						String arrowBearing = arg.toLowerCase().split("arrow_")[1];
+						System.out.println(arrowBearing);
+						if(arrowBearing.equals("down")){
+							((TerrainObject)object).setTexture("TERRAIN_WOODCRATEARROWDOWN");
+						}
 						
 					}
-					
-					System.out.println(split[1].split("terr.")[0]);
-					
-					String[] objdef = split[1].split("terr.");
-					
-					System.out.println(objdef[1].split(" ")[0]);
-					
-						((TerrainObject)object).setTexture(objdef[1].split(" ")[0]);
-
-					
-					System.out.println(objdef[1]+" "+line.charAt(0));
-				}
-	
-	if(split[1].startsWith("obs.")){
-		
-		object = new CrateObjectBase(this);
-		boolean isSlanted = false;
-		boolean slantLeft = false;
-		((TerrainObject)object).setTexture("TERRAIN_EMPTYCRATE");
-		if(split[1].contains(" ")){//This all handles metadata... Shouldn't need it
-			
-			String[] argSplit = split[1].split(" ");
-			System.out.println("argsplit[1]:"+argSplit[1]);
-			for(String arg : argSplit){
-				if(arg.toLowerCase().startsWith("arrow")){//Populate the crate with an arrow
-					CrateObjectBase cr = new CrateObjectBase(this);
-					cr.setPosition(200, 200);
-					( (CrateObjectBase)object ).setObjectInside(cr);
-					
-					String arrowBearing = arg.toLowerCase().split("arrow_")[1];
-					System.out.println(arrowBearing);
-					if(arrowBearing.equals("down")){
-						((TerrainObject)object).setTexture("TERRAIN_WOODCRATEARROWDOWN");
+					if(arg.toLowerCase().startsWith("treasure")){
+						object = new TreasureCrate(this);
+						chestsInWorld++;
 					}
-					
 				}
+				
+				//split = argSplit;
+				
 			}
 			
-			//split = argSplit;
+			System.out.println(split[1].split("obs.")[0]);
 			
-		}
-		
-		System.out.println(split[1].split("obs.")[0]);
-		
-		String[] objdef = split[1].split("obs..");
-		
-		System.out.println(objdef[1].split(" ")[0]);
-		
-		((CrateObjectBase)object).setTexture(objdef[1].split(" ")[0]);
-	
-		
-		System.out.println(objdef[1]+" "+line.charAt(0));
-		System.out.println("::"+object.getClass().getName());
-	}
+			String[] objdef = split[1].split("obs..");
+			
+			System.out.println(objdef[1].split(" ")[0]);
+			
+			((CrateObjectBase)object).setTexture(objdef[1].split(" ")[0]);
+			
+			if(object.isDead){
+				object.isDead=false;
+				object.deathTicks=0;
+				object.health=object.maxHealth;
+				object.liveTicks=0;
 				
-				if(split[1].startsWith("PPOS")){
+			}
+			
+			System.out.println(objdef[1]+" "+line.charAt(0));
+			System.out.println("::"+object.getClass().getName());
+		}
+				
+			if(split[1].startsWith("PPOS")){
 					object = new ObjectPositioner(this, player);
 					object = ((ObjectPositioner)object);
 					System.out.println("PPOS " + split[0]);
 				}
-				levelDefinitions.put(line.charAt(0), object);
+			if(line.startsWith("TREASURE_REQ")){
+				System.out.println(split[1]);
+				this.chestsRequired = Integer.parseInt(line.split("=")[1]);
+			}
+				if(object!=null){
+					levelDefinitions.put(line.charAt(0), object);
+				}
 			}
 			
 			for(int i = 0; i < levelDefinitions.size(); i ++){

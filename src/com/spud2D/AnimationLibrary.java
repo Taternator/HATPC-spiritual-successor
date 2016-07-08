@@ -10,12 +10,16 @@ public class AnimationLibrary {
 	public static final Animation DEBUG_TEST = createAnimation(PathConstants.PATH_TEXTURE_DEBUG, "test");
 	
 	public static final Animation TERRAIN_ROCK = createAnimation(PathConstants.PATH_TEXTURE_TERRAIN, "rock");
+	public static final Animation TERRAIN_TREASURECHEST = createAnimation(PathConstants.PATH_TEXTURE_TERRAIN, "chest");
 	public static final Animation TERRAIN_EMPTYCRATE = createAnimation(PathConstants.PATH_TEXTURE_TERRAIN, "emptycrate");
 	public static final Animation TERRAIN_WOODCRATEARROWDOWN = createAnimation(PathConstants.PATH_TEXTURE_TERRAIN, "woodcratearrowdown");
 	
 	public static final Animation DEBUG_PLAYER_STAND = createAnimation(PathConstants.PATH_TEXTURE_DEBUG_PLAYER, "stand",100);
 	public static final Animation DEBUG_PLAYER_WALK = createAnimation(PathConstants.PATH_TEXTURE_DEBUG_PLAYER, "walk",100);
 	public static final Animation DEBUG_PLAYER_ = createAnimation(PathConstants.PATH_TEXTURE_DEBUG_PLAYER, "stand");
+	
+	
+	public static final Animation PARTICLE_GOLDCOIN = createAnimation(PathConstants.PATH_TEXTURE_PARTICLES, "goldcoin");
 	
 	
 	public static final void init(){

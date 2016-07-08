@@ -10,6 +10,8 @@ import com.spud2D.World;
 
 public class TerrainObject extends GameObject {
 	
+	public boolean doesStopOnCollision=true;
+	
 	public TerrainObject(){
 		super();
 	}
@@ -107,20 +109,22 @@ public class TerrainObject extends GameObject {
 				}
 			}
 			else if(collisionTop) {
-				other.motionY=0;
-				other.onGround=true;
-				other.pos.y=this.pos.y-other.height;
+				if(doesStopOnCollision){
+					other.motionY=0;
+					other.onGround=true;
+					other.pos.y=this.pos.y-other.height;
+				}
 			}
 		
 		boolean collisionBottom = hitbox.doesBottomTouchTopOf(other.getHitbox());
-		if(collisionBottom) {
+		if(collisionBottom&&doesStopOnCollision) {
 				other.pos.y += Math.abs(other.motionY);
 				other.motionY=0;
 		}
 		
 		boolean collisionLeft = hitbox.doesRightTouchLeftOf(other.getHitbox());
 		
-		if(collisionLeft){
+		if(collisionLeft&&doesStopOnCollision){
 			if(hitbox.isSlantedTerrain){
 				float slant = hitbox.pathHitbox.getWidth();
 				
@@ -139,7 +143,7 @@ public class TerrainObject extends GameObject {
 		
 		boolean collisionRight = hitbox.doesLeftTouchRightOf(other.getHitbox());
 		
-		if(collisionRight){
+		if(collisionRight&&doesStopOnCollision){
 			if(hitbox.isSlantedTerrain){
 				float slant = hitbox.pathHitbox.getWidth();
 				

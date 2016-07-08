@@ -1,13 +1,13 @@
-package objects;
+package objects.particles;
 
 import java.util.Random;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-public class ParticleBloodDrops extends ParticleObjectBase {
+public class ParticleColored extends ParticleObjectBase {
 
-	public ParticleBloodDrops(int p, float x, float y) {
+	public ParticleColored(int p, float x, float y) {
 		super(p,x,y);
 		Random r = new Random();
 		this.particleLifespan = 100;

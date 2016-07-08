@@ -5,7 +5,7 @@ import java.util.Random;
 
 import objects.ClientPlayerObject;
 import objects.GameObject;
-import objects.ParticleObjectBase;
+import objects.particles.ParticleObjectBase;
 
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AppGameContainer;
@@ -40,17 +40,21 @@ public class GameFrame extends BasicGame {
 	float scrollX, scrollY;
 	World world;
 	
-	GameObject player;
+	public static ClientPlayerObject player;
 	public static Camera camera;
 	
 	public static final float SCROLL_X_MIN = 300, SCROLL_X_MAX = 500;
 	
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException {
+		g.setClip(0, 0, 800, 600);
 		GL11.glPushMatrix();
-		GL11.glTranslatef(windowWidth/2,windowHeight/2,0);
-		GL11.glScalef(camera.cameraZoom, camera.cameraZoom, 1);
-		GL11.glTranslatef(-camera.pos.x, -camera.pos.y, 0);
+		g.translate(windowWidth/2,windowHeight/2);
+		g.scale(camera.cameraZoom, camera.cameraZoom);
+		g.translate(-camera.pos.x, -camera.pos.y);
+		//GL11.glTranslatef(windowWidth/2,windowHeight/2,0);
+		//GL11.glScalef(camera.cameraZoom, camera.cameraZoom, 1);
+		//GL11.glTranslatef(-camera.pos.x, -camera.pos.y, 0);
 		
 		//TODO Add a "layer" variable to objects for what order they should be rendered,
 		//and then create a comparator to sort objectsList so that entity entries are organized by
@@ -65,6 +69,10 @@ public class GameFrame extends BasicGame {
 		g.drawString("X:"+player.pos.x+" Y:"+player.pos.y, 2, 24);
 		g.drawString("MX:"+player.motionX+" MY:"+player.motionY, 2, 36);
 		g.drawString("SCRX:"+scrollX+" SCRY:"+scrollY, 2, 48);
+		
+		//Render the thing
+		g.drawString("Treasure: " + player.points + " / " + world.chestsRequired, 300, 30);
+		
 	}
 
 	@Override
@@ -76,7 +84,7 @@ public class GameFrame extends BasicGame {
 		
 		Controls.setInput(gc.getInput());
 		world = new World();
-		player= createClientPlayer(world);
+		player= (ClientPlayerObject)createClientPlayer(world);
 		
 		world.addObject(player);
 		camera = new Camera(world, player);

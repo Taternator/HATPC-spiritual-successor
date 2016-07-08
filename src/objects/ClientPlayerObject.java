@@ -1,5 +1,7 @@
 package objects;
 
+import objects.particles.ParticleSprite;
+
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
@@ -29,11 +31,22 @@ public class ClientPlayerObject extends GameObject {
 			if(direction==DIRECTION_RIGHT){
 				img = img.getFlippedCopy(true, false);
 			}
+			if(invulnTicks>0&&invulnTicks%15>8){
+				img.setAlpha(0.4F);
+			}
+			else{
+				img.setAlpha(1.0F);
+			}
 			img.draw(pos.x, pos.y);
 			if(Controls.DEBUG){
 				renderHitbox(g);
 			}
 			g.popTransform();
 		}
+	}
+
+	public void gainPoints(int i) {
+		points+= i;
+		world.spawnParticle(new ParticleSprite(1,pos.x+(width/2),pos.y+(height/2), AnimationLibrary.PARTICLE_GOLDCOIN));
 	}
 }

@@ -1,5 +1,6 @@
 package objects;
 
+import objects.particles.ParticleColored;
 import objects.tiles.TerrainObject;
 
 import org.newdawn.slick.Animation;
@@ -17,6 +18,8 @@ import com.spud2D.World;
 public class GameObject implements Comparable<GameObject> {
 	public Vector2f pos;
 	public int layer=0;
+	public float traction = 0.9F;
+	
 	public float width, height;
 	public float motionX, motionY;
 	public float moveSpeed, jumpHeight;
@@ -25,6 +28,7 @@ public class GameObject implements Comparable<GameObject> {
 	public float overheal=0, health=0, maxHealth = 10, hitlag;
 	public float weight = 0.9F;
 	public int jumpTicks, maxJumpTicks=-25, liveTicks, deathTicks, maxDeathTicks, insideTicks;
+	public int invulnTicks;
 	public boolean onGround = false, isDead=false, shouldOverheal=false, canMove = false, canWallCling = false, canFly = false, isSolid = true, insideOfObject = false, isControllable = false, shouldRender = true;
 	public World world;
 	
@@ -61,6 +65,8 @@ public class GameObject implements Comparable<GameObject> {
 	
 	
 	public void update(int delta){
+		invulnTicks--;
+		
 		if(health<= 0&&!isDead){
 			this.isDead = true;
 		}
@@ -105,7 +111,7 @@ public class GameObject implements Comparable<GameObject> {
 			pos.x += motionX;
 			pos.y += motionY;
 			
-			motionX *= 0.9F;
+			motionX *= traction;
 			motionY *= 0.95F;
 			
 		}
@@ -218,7 +224,7 @@ public class GameObject implements Comparable<GameObject> {
 	
 	public void spawnBloodSpurts(){
 		for(int i = 0; i < 1; i ++){
-			ParticleBloodDrops particle = new ParticleBloodDrops(10, pos.x+(width/2), pos.y+(height/2));
+			ParticleColored particle = new ParticleColored(10, pos.x+(width/2), pos.y+(height/2));
 			float h,k;
 			
 			for(int b = 0; b < particle.pos.length; b ++){
@@ -249,6 +255,12 @@ public class GameObject implements Comparable<GameObject> {
 			}
 		}
 	}
+	
+	public void takeDamage(float amt){
+		if(invulnTicks>0)return;
+		health -= amt;
+		invulnTicks=20;
+	}
 
 	public void setSize(float w, float h){
 		width=w;height=h;
@@ -272,7 +284,7 @@ public class GameObject implements Comparable<GameObject> {
 	public void jump() {
 		if(onGround&&jumpTicks==0){
 			onGround = false;
-			motionY-= 2.2F;
+			motionY-= jumpHeight;
 			jumpTicks=maxJumpTicks;
 			if(this.jumpAnimation!=null){
 				this.currentAnimation=this.jumpAnimation;

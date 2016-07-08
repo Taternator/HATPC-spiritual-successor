@@ -58,7 +58,7 @@ public class Controls {
 			
 			if(DEBUG_NEW_WORLD.isPressed()){
 				o.setPosition(300, 400);
-				//o.world.createWorldLevel(LevelLibrary.DEBUG_LEVEL,o);
+				o.world.createWorldLevel(LevelLibrary.DEBUG_LEVEL,o);
 			}
 			
 			if(DEBUGCAMERA_ZOOMIN.isDown()){
