@@ -7,16 +7,12 @@ import com.spud2D.AnimationLibrary;
 import com.spud2D.World;
 
 public class TreasureCrate extends CrateObjectBase {
-
-	public TreasureCrate() {
-		this.setTexture("TERRAIN_TREASURECHEST");
-		this.doesStopOnCollision=false;
-	}
-
+	
 	public TreasureCrate(World w) {
 		super(w);
 		this.setTexture("TERRAIN_TREASURECHEST");
 		this.doesStopOnCollision=false;
+		shouldPlayerBounceOffTop=false;
 	}
 	
 	
@@ -45,6 +41,7 @@ public class TreasureCrate extends CrateObjectBase {
 		obj.hitbox.isSlantedLeft=hitbox.isSlantedLeft;
 		if(objectInside!=null)
 		obj.setObjectInside(objectInside.copy());
+		obj.shouldPlayerBounceOffTop=this.shouldPlayerBounceOffTop;
 		
 		return obj;
 	}
