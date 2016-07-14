@@ -11,12 +11,14 @@ public class TreasureCrate extends CrateObjectBase {
 	public TreasureCrate() {
 		this.setTexture("TERRAIN_TREASURECHEST");
 		this.doesStopOnCollision=false;
+		shouldPlayerBounceOnTop=false;
 	}
 
 	public TreasureCrate(World w) {
 		super(w);
 		this.setTexture("TERRAIN_TREASURECHEST");
 		this.doesStopOnCollision=false;
+		shouldPlayerBounceOnTop=false;
 	}
 	
 	
@@ -45,6 +47,7 @@ public class TreasureCrate extends CrateObjectBase {
 		obj.hitbox.isSlantedLeft=hitbox.isSlantedLeft;
 		if(objectInside!=null)
 		obj.setObjectInside(objectInside.copy());
+		obj.shouldPlayerBounceOnTop=this.shouldPlayerBounceOnTop;
 		
 		return obj;
 	}

@@ -11,6 +11,7 @@ import com.spud2D.World;
 public class CrateObjectBase extends TerrainObject {
 	
 	protected GameObject objectInside;
+	protected boolean shouldPlayerBounceOnTop=true;
 	
 	public CrateObjectBase() {
 		//this.setTexture("TERRAIN_EMPTYCRATE");
@@ -28,7 +29,6 @@ public class CrateObjectBase extends TerrainObject {
 	@Override
 	public boolean collideWith(GameObject other){
 		if(isDead)return false;
-		System.out.println("REEEEE");
 		boolean topCollision = this.hitbox.doesTopTouchBottomOf(other.getHitbox());
 		
 		float my = other.motionY;
@@ -36,7 +36,7 @@ public class CrateObjectBase extends TerrainObject {
 		boolean b = super.collideWith(other);
 		
 		//Apply 'bounce' effect if needed
-		if(topCollision&&health>0){
+		if(shouldPlayerBounceOnTop&&topCollision){
 			other.motionY = -Math.abs(my-0.1F);
 			other.pos.y+=other.motionY;
 			other.hitbox.update();
@@ -106,6 +106,8 @@ public class CrateObjectBase extends TerrainObject {
 		obj.hitbox.isSlantedLeft=hitbox.isSlantedLeft;
 		if(objectInside!=null)
 		obj.setObjectInside(objectInside.copy());
+		obj.shouldPlayerBounceOnTop=this.shouldPlayerBounceOnTop;
+		
 		
 		return obj;
 	}
